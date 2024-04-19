@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,8 +16,13 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/', function () {
+    // Se l'utente è autenticato, reindirizza alla dashboard dell'amministratore
+    // Altrimenti, reindirizza alla pagina degli elenchi dei progetti
+    return Auth::check() ? redirect()->route('admin.admin') : redirect()->route('index');
+})->name('home');
 
-Route::get('/', [ProjectController::class, 'index'])->name('index');
+Route::resource('projects', ProjectController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -36,6 +42,6 @@ Route::middleware(['auth', 'verified'])
         ->group(function() {
 
                 
-            Route::get('/', [DashboardController::class, 'index'])->name('index');
+            Route::get('/', [DashboardController::class, 'index'])->name('admin');
         }
 );

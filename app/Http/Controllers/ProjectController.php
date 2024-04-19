@@ -22,7 +22,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return view('projects.create');
     }
 
     /**
@@ -30,7 +30,17 @@ class ProjectController extends Controller
      */
     public function store(StoreProjectRequest $request)
     {
-        //
+        //Validiamo la richiesta e otteniamo i dati validati
+        $validatedData = $request->validated();
+
+        //Creiamo un nuovo Progetto con i dati validati
+        $newProject = new Project();
+        $newProject->fill($validatedData);
+
+        $newProject->save();
+
+        //Reindirizziamo alla pagina dei Progetti
+        return redirect()->route('/');
     }
 
     /**

@@ -15,12 +15,12 @@
                       <h5 class="card-title">{{$project->name}}</h5>
                       <p class="card-text">{{$project->description}}</p>
                       <p class="card-text"><small>{{$project->technologies_used}}</small></p>
-                      <a href="#" class="btn btn-primary">Più dettagli</a>
+                      <a href="#" class="btn btn-primary">Link GitHub</a>
                     </div>
                 </div>
             </div>
             @endforeach
-
+    
         </div>
     </div>
 @endsection
