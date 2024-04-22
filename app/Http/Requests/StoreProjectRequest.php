@@ -23,8 +23,8 @@ class StoreProjectRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:50',
-            'description' => 'required|text',
-            'cover_image' => 'nullable|string',
+            'description' => 'required',
+            'cover_image' => 'file|max:1024',
             'technologies_used' => 'required|string',
             'github_link' => 'required|string',
         ];
@@ -35,10 +35,12 @@ class StoreProjectRequest extends FormRequest
         return [
             'name.required' => 'Inserisci un Titolo',
             'description.required' => 'Inserisci una Descrizione',
-            'technologies_used.required' => 'Inserisci almeno una tecnologia usata',
+            'cover_image.required' => 'Inserisci un immagine di copertina',
+            'technologies_used.required' => 'Inserisci almeno un linguaggio di programmazione usato',
             'github_link.required' => 'Inserisci il link alla repo di GitHub',
 
             'max' => 'Il campo :attribute deve avere massimo :max caratteri',
+            'cover_image.max' => "L'immagine deve essere grande al massimo :max kilobyte",
         ];
     }
 }

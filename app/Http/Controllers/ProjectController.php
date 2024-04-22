@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -13,8 +14,15 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::all();
-        return view('projects.index', compact('projects'));
+        if (Auth::check()) {
+            // Se l'utente è autenticato, reindirizza alla dashboard dell'amministratore
+            $projects = Project::all();
+            return view('admin.index', compact('projects'));
+        } else {
+            // Altrimenti, reindirizza alla pagina degli elenchi dei progetti per gli ospiti
+            $projects = Project::all();
+            return view('index', compact('projects'));
+        }
     }
 
     /**
@@ -22,7 +30,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        return view('projects.create');
+        return view('admin.projects.create');
     }
 
     /**
@@ -39,8 +47,9 @@ class ProjectController extends Controller
 
         $newProject->save();
 
+
         //Reindirizziamo alla pagina dei Progetti
-        return redirect()->route('/');
+        return redirect()->route('admin.index');
     }
 
     /**
@@ -56,15 +65,21 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        return view('admin.projects.edit', compact('project'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProjectRequest $request, Project $project)
+    public function update(StoreProjectRequest $request, Project $project)
     {
-        //
+        $request->validated();
+
+        $project->fill($request->all());
+
+        $project->save();
+        
+        return redirect()->route('admin.index');
     }
 
     /**
@@ -72,6 +87,8 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $project->delete();
+
+        return redirect()->route('admin.index');
     }
 }

@@ -16,17 +16,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/', function () {
-    // Se l'utente è autenticato, reindirizza alla dashboard dell'amministratore
-    // Altrimenti, reindirizza alla pagina degli elenchi dei progetti
-    return Auth::check() ? redirect()->route('admin.admin') : redirect()->route('index');
-})->name('home');
+Route::get('/', [ProjectController::class, 'index']);
 
 Route::resource('projects', ProjectController::class);
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -42,6 +34,6 @@ Route::middleware(['auth', 'verified'])
         ->group(function() {
 
                 
-            Route::get('/', [DashboardController::class, 'index'])->name('admin');
+            Route::get('/', [DashboardController::class, 'index'])->name('index');
         }
 );
