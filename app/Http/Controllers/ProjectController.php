@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -43,6 +44,16 @@ class ProjectController extends Controller
 
         //Creiamo un nuovo Progetto con i dati validati
         $newProject = new Project();
+        
+        //controlliamo se nella request è presente un file in arrivo
+        if($request->hasFile('cover_image')) {
+            //salviamo il perscorso dell'img in una variabile, e contemporaneamente nel server
+            $path = Storage::disk('public')->put('projects_images', $request->cover_image);
+
+            //salvo il nuovo percorso ottenuto dal salvataggio dell'immagine
+            $newProject->cover_image = $path;
+        }
+        
         $newProject->fill($validatedData);
 
         $newProject->save();
@@ -75,11 +86,18 @@ class ProjectController extends Controller
     {
         $request->validated();
 
-        $project->fill($request->all());
+        //Controllo se la cover image è stata inserita
+        if($request->hasFile('cover_image')) {
+            // la cartella che abbiamo indicato nel metodo put() se è già presente viene utilizzata, altrimenti viene creata vuota
+            $path = Storage::disk('public')->put('projects_images', $request->cover_image);
+    
+            // salvo il nuovo percorso che ho ottenuto dal salvataggio dell'immagine (Laravel per privacy e sicurezza cambia il nome del file)
+            $project->cover_image = $path;
+        }
 
-        $project->save();
+        $project->update($request->all());
         
-        return redirect()->route('admin.index');
+        return redirect()->route('admin.index', $project->id);
     }
 
     /**

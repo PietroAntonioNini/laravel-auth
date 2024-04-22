@@ -30,7 +30,7 @@
         @foreach ($projects as $project)
         <div class="col">
             <div class="card text-bg-dark">
-                <img src="..." class="card-img" alt="..." style="min-height: 200px;">
+                <img src="{{ asset('storage/' . $project->cover_image) }}" class="card-img" alt="..." style="min-height: 200px;">
     
                 <div class="card-img-overlay">
                   <h5 class="card-title">{{$project->name}}</h5>
@@ -42,7 +42,7 @@
                         <a href="#" class="btn btn-primary">Link GitHub</a>
 
                         <div class="d-flex">
-                            <a href="{{ route('projects.edit', $project) }}" class="btn btn-outline-warning btn-sm me-2">Modifica</a>
+                            <a href="{{ route('projects.edit', $project->id) }}" class="btn btn-outline-warning btn-sm me-2">Modifica</a>
 
                             <!-- Modal button -->
                             <button type="button" class="btn btn-outline-danger btn-sm"  data-bs-toggle="modal" data-bs-target="#delete-project">
@@ -82,7 +82,7 @@
                                                     @enderror
 
                                                     <button type="submit" class="btn btn-danger">
-                                                        {{ __('Elimina Account') }}
+                                                        {{ __('Elimina Progetto') }}
                                                     </button>
                                                 </div>
                                             </form>
