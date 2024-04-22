@@ -19,7 +19,6 @@ class ProjectSeeder extends Seeder
 
             $newProject-> name ='Progetto 1';
             $newProject-> description = 'Descrizione del Progetto 1';
-            $newProject-> cover_image = 'image1.jpg';
             $newProject-> technologies_used = 'html,css,js';
             $newProject-> github_link = 'https://github.com/progetto1';
 
